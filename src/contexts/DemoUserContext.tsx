@@ -5,7 +5,7 @@ import { DemoUser } from "@/types";
 
 const FALLBACK_DEMO_USERS: DemoUser[] = [
   {
-    id: "usr_student_01",
+    id: "demo-student-1",
     name: "Alex Rivera",
     role: "student",
     isActive: true,
@@ -13,7 +13,7 @@ const FALLBACK_DEMO_USERS: DemoUser[] = [
     updatedAt: new Date().toISOString(),
   },
   {
-    id: "usr_teacher_01",
+    id: "demo-teacher-1",
     name: "Prof. Clara Edwards",
     role: "teacher",
     isActive: true,
@@ -21,15 +21,15 @@ const FALLBACK_DEMO_USERS: DemoUser[] = [
     updatedAt: new Date().toISOString(),
   },
   {
-    id: "usr_principal_01",
-    name: "Dr. Arthur Vance",
+    id: "demo-principal-1",
+    name: "Dr. Arthur Vance (Principal)",
     role: "principal",
     isActive: true,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   },
   {
-    id: "usr_student_inactive",
+    id: "demo-inactive-1",
     name: "Jordan Smith (Inactive Student)",
     role: "student",
     isActive: false,
