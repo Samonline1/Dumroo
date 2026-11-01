@@ -33,7 +33,7 @@ export default function WorkspacePage() {
       <Navbar />
 
       <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
-        {!currentUser?.isActive ? (
+        {currentUser && !currentUser.isActive ? (
           <div className="max-w-md mx-auto my-16 bg-white rounded-3xl p-8 border border-red-200 shadow-lg text-center">
             <div className="w-12 h-12 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-3">
               <AlertCircle className="w-6 h-6" />

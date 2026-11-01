@@ -3,6 +3,41 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { DemoUser } from "@/types";
 
+const FALLBACK_DEMO_USERS: DemoUser[] = [
+  {
+    id: "usr_student_01",
+    name: "Alex Rivera",
+    role: "student",
+    isActive: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: "usr_teacher_01",
+    name: "Prof. Clara Edwards",
+    role: "teacher",
+    isActive: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: "usr_principal_01",
+    name: "Dr. Arthur Vance",
+    role: "principal",
+    isActive: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: "usr_student_inactive",
+    name: "Jordan Smith (Inactive Student)",
+    role: "student",
+    isActive: false,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+];
+
 interface DemoUserContextType {
   currentUser: DemoUser | null;
   setCurrentUser: (user: DemoUser) => void;
@@ -14,34 +49,38 @@ interface DemoUserContextType {
 const DemoUserContext = createContext<DemoUserContextType | undefined>(undefined);
 
 export function DemoUserProvider({ children }: { children: React.ReactNode }) {
-  const [currentUser, setCurrentUserState] = useState<DemoUser | null>(null);
-  const [allUsers, setAllUsers] = useState<DemoUser[]>([]);
+  const [currentUser, setCurrentUserState] = useState<DemoUser | null>(FALLBACK_DEMO_USERS[0]);
+  const [allUsers, setAllUsers] = useState<DemoUser[]>(FALLBACK_DEMO_USERS);
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchUsers = async () => {
     try {
       const res = await fetch("/api/demo-users");
       const json = await res.json();
-      if (json.success && Array.isArray(json.data)) {
-        setAllUsers(json.data);
+      const usersList = (json.success && Array.isArray(json.data) && json.data.length > 0)
+        ? json.data
+        : FALLBACK_DEMO_USERS;
 
-        // Stored identity
-        const savedId = typeof window !== "undefined" ? localStorage.getItem("demo_user_id") : null;
-        let selected = json.data.find((u: DemoUser) => u.id === savedId);
+      setAllUsers(usersList);
 
-        // Fallback
-        if (!selected) {
-          selected = json.data.find((u: DemoUser) => u.role === "student" && u.isActive) || json.data[0];
-        }
+      // Stored identity
+      const savedId = typeof window !== "undefined" ? localStorage.getItem("demo_user_id") : null;
+      let selected = usersList.find((u: DemoUser) => u.id === savedId);
 
-        if (selected) {
-          setCurrentUserState(selected);
-          document.cookie = `demo_user_id=${selected.id}; path=/; max-age=86400; SameSite=Lax`;
-          localStorage.setItem("demo_user_id", selected.id);
-        }
+      // Fallback
+      if (!selected) {
+        selected = usersList.find((u: DemoUser) => u.role === "student" && u.isActive) || usersList[0];
       }
-    } catch (err) {
-      console.error("Failed to load demo users:", err);
+
+      if (selected) {
+        setCurrentUserState(selected);
+        document.cookie = `demo_user_id=${selected.id}; path=/; max-age=86400; SameSite=Lax`;
+        localStorage.setItem("demo_user_id", selected.id);
+      }
+    } catch {
+      // Use fallback
+      setCurrentUserState(FALLBACK_DEMO_USERS[0]);
+      setAllUsers(FALLBACK_DEMO_USERS);
     } finally {
       setIsLoading(false);
     }
