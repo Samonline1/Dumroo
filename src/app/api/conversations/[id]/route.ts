@@ -4,6 +4,8 @@ import { conversationRepository } from "@/lib/repositories";
 import { successResponse } from "@/lib/utils/api-response";
 import { handleApiError, ApiError } from "@/lib/utils/error-handler";
 
+export const dynamic = "force-dynamic";
+
 interface RouteParams {
   params: Promise<{ id: string }>;
 }

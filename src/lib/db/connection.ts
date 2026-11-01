@@ -27,6 +27,13 @@ export function getPostgresDb(isMigration = false) {
     : process.env.DATABASE_URL || process.env.DIRECT_URL;
 
   if (!rawUrl) {
+    // Build phase fallback
+    if (process.env.NEXT_PHASE === "phase-production-build" || !process.env.DATABASE_URL) {
+      const fallbackUrl = "postgresql://postgres:postgres@localhost:5432/postgres";
+      const client = postgres(fallbackUrl, { max: 1, prepare: false, ssl: false });
+      return { db: drizzle(client, { schema }), client };
+    }
+
     throw new Error(
       "DATABASE_URL or DIRECT_URL is not defined in .env.local for PostgreSQL provider."
     );

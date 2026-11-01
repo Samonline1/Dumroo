@@ -7,6 +7,8 @@ import { handleApiError, ApiError } from "@/lib/utils/error-handler";
 import { ConversationType } from "@/types";
 import { hasPermission } from "@/lib/permissions/access-control";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(request: NextRequest) {
   try {
     const user = await resolveDemoUser(request);

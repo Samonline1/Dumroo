@@ -5,6 +5,8 @@ import { activityRepository } from "@/lib/repositories";
 import { successResponse } from "@/lib/utils/api-response";
 import { handleApiError } from "@/lib/utils/error-handler";
 
+export const dynamic = "force-dynamic";
+
 export async function POST(request: NextRequest) {
   try {
     const user = await resolveDemoUser(request);

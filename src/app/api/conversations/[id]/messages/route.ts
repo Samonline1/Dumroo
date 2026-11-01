@@ -5,6 +5,8 @@ import { paginationQuerySchema } from "@/lib/validations/schemas";
 import { successResponse } from "@/lib/utils/api-response";
 import { handleApiError, ApiError } from "@/lib/utils/error-handler";
 
+export const dynamic = "force-dynamic";
+
 interface RouteParams {
   params: Promise<{ id: string }>;
 }
